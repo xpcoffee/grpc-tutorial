@@ -1,9 +1,9 @@
 
 syntax = "proto3";
-package moviecontroller;
+package moviefinder;
 import "common/common.proto";
 
-option java_package = "com.proto.moviecontroller";
+option java_package = "com.proto.moviefinder";
 option java_multiple_files = true;
 
 message MovieRequest {
@@ -14,6 +14,6 @@ message MovieResponse {
     common.Movie movie = 1;
 }
 
-service MovieControllerService {
+service MovieFinderService {
     rpc getMovie(MovieRequest) returns (MovieResponse) {};
 }

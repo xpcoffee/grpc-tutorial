@@ -8,8 +8,8 @@ version '1.0'
 
 repositories {
     mavenCentral()
-
 }
+
 protobuf {
     protoc {
         artifact = 'com.google.protobuf:protoc:3.12.0'

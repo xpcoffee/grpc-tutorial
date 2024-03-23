@@ -1,8 +1,8 @@
 package client;
 
 import com.proto.common.Genre;
-import com.proto.moviecontroller.MovieControllerServiceGrpc;
-import com.proto.moviecontroller.MovieRequest;
+import com.proto.moviefinder.MovieFinderServiceGrpc;
+import com.proto.moviefinder.MovieRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -15,7 +15,7 @@ public class MovieFinderClient {
 
     public static void main(String[] args) {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", MOVIE_CONTROLLER_SERVICE_PORT).usePlaintext().build();
-        var movieFinderClient = MovieControllerServiceGrpc.newBlockingStub(channel);
+        var movieFinderClient = MovieFinderServiceGrpc.newBlockingStub(channel);
 
         try {
             var request = MovieRequest.newBuilder().setGenre(Genre.ACTION).setUserid("user-foo1234").build();

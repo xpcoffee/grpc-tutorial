@@ -1,8 +1,8 @@
-package moviecontroller;
+package moviefinder;
 
-import com.proto.moviecontroller.MovieControllerServiceGrpc;
-import com.proto.moviecontroller.MovieRequest;
-import com.proto.moviecontroller.MovieResponse;
+import com.proto.moviefinder.MovieFinderServiceGrpc;
+import com.proto.moviefinder.MovieRequest;
+import com.proto.moviefinder.MovieResponse;
 import com.proto.moviestore.MovieStoreRequest;
 import com.proto.moviestore.MovieStoreServiceGrpc;
 import com.proto.recommender.RecommenderRequest;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Orchestrates logic needed to find, filter, recommend movies.
  */
-public class MovieControllerServiceImpl extends MovieControllerServiceGrpc.MovieControllerServiceImplBase {
+public class MovieFinderServiceImpl extends MovieFinderServiceGrpc.MovieFinderServiceImplBase {
     public static final int MOVIE_STORE_SERVICE_PORT = 50052;
     public static final int USER_PREFERENCES_SERVICE_PORT = 50053;
     public static final int RECOMMENDER_SERVICE_PORT = 50054;
@@ -42,6 +42,7 @@ public class MovieControllerServiceImpl extends MovieControllerServiceGrpc.Movie
     @Override
     public void getMovie(MovieRequest request, StreamObserver<MovieResponse> responseObserver) {
         String userId = request.getUserid();
+
 
         MovieStoreServiceGrpc.MovieStoreServiceBlockingStub movieStoreClient = MovieStoreServiceGrpc.newBlockingStub(getChannel(MOVIE_STORE_SERVICE_PORT));
         UserPreferencesServiceGrpc.UserPreferencesServiceStub userPreferencesClient = UserPreferencesServiceGrpc.newStub(getChannel(USER_PREFERENCES_SERVICE_PORT));
