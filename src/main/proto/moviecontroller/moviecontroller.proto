@@ -14,6 +14,6 @@ message MovieResponse {
     common.Movie movie = 1;
 }
 
-service MovieController {
+service MovieControllerService {
     rpc getMovie(MovieRequest) returns (MovieResponse) {};
 }
