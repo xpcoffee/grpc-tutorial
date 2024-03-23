@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'com.google.protobuf' version '0.8.14'
+    id 'idea'
 }
 group 'com.xpcoffee'
 version '1.0'
