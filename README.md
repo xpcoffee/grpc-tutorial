@@ -30,9 +30,6 @@ docker compose up
 ./gradlew movie-finder-consumer:run
 ```
 
-> NOTE: for some reason the output of running the client appears in the `movie-finder` server process. 
-> I have no idea why this happens...
-
 ## Structure
 
 ```text

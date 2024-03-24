@@ -34,11 +34,14 @@ public class RecommenderServiceImpl extends RecommenderServiceGrpc.RecommenderSe
 
             @Override
             public void onCompleted() {
+                System.out.println("Finding a recommendation from " + movies.size() + " movies");
+
                 if (movies.size() > 0) {
                     var recommendedMovie = findMovieForRecommendation(movies);
                     responseObserver.onNext(
                             RecommenderResponse.newBuilder().setMovie(recommendedMovie).build()
                     );
+                    responseObserver.onCompleted();
                 } else {
                     responseObserver.onError(
                             Status.NOT_FOUND.withDescription("No movies to recommend.").asRuntimeException()

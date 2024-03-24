@@ -20,6 +20,8 @@ public class MovieStoreServiceImpl extends MovieStoreServiceGrpc.MovieStoreServi
      */
     @Override
     public void getMovies(MovieStoreRequest request, StreamObserver<MovieStoreResponse> responseObserver) {
+        System.out.println("Returning movies for genre " + request.getGenre());
+
         List<Movie> movies = Arrays.asList(
                 Movie.newBuilder()
                         .setTitle("No country for old men")

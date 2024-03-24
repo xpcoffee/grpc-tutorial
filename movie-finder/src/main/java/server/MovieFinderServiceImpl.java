@@ -62,13 +62,9 @@ public class MovieFinderServiceImpl extends MovieFinderServiceGrpc.MovieFinderSe
     public void getMovie(MovieRequest request, StreamObserver<MovieResponse> responseObserver) {
         String userId = request.getUserid();
 
-
         MovieStoreServiceGrpc.MovieStoreServiceBlockingStub movieStoreClient = MovieStoreServiceGrpc.newBlockingStub(getChannel(movieStoreEndpoint));
         UserPreferencesServiceGrpc.UserPreferencesServiceStub userPreferencesClient = UserPreferencesServiceGrpc.newStub(getChannel(userPreferencesEndpoint));
         RecommenderServiceGrpc.RecommenderServiceStub recommenderClient = RecommenderServiceGrpc.newStub(getChannel(recommenderEndpoint));
-
-        // no idea what the latch is for...
-        CountDownLatch latch = new CountDownLatch(1);
 
         StreamObserver<RecommenderRequest> recommenderRequestObserver = recommenderClient.getRecommendedMovie(
                 new StreamObserver<>() {
@@ -81,13 +77,11 @@ public class MovieFinderServiceImpl extends MovieFinderServiceGrpc.MovieFinderSe
                     @Override
                     public void onError(Throwable t) {
                         responseObserver.onError(t);
-                        latch.countDown();
                     }
 
                     @Override
                     public void onCompleted() {
                         responseObserver.onCompleted();
-                        latch.countDown();
                     }
                 });
 
@@ -119,12 +113,6 @@ public class MovieFinderServiceImpl extends MovieFinderServiceGrpc.MovieFinderSe
                 });
 
         userPreferencesRequestObserver.onCompleted();
-
-        try {
-            latch.await(3L, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private ManagedChannel getChannel(String endpoint) {
