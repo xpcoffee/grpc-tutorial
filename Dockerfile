@@ -7,6 +7,9 @@ RUN gradle jar --no-daemon
 
 # Use jlink to build custom jre (can't find a good minimal image online)
 # props to https://careers.wolt.com/en/blog/tech/how-to-reduce-jvm-docker-image-size
+#
+# Also note that alpine images seem to have problems with proto
+# https://github.com/xolstice/protobuf-maven-plugin/issues/23#issuecomment-266098369
 RUN $JAVA_HOME/bin/jlink \
          --verbose \
          --add-modules ALL-MODULE-PATH \
