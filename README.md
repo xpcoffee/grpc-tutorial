@@ -78,3 +78,40 @@ Root project 'movie-grpc'
 +--- Project ':recommender'               | a server "in-the-middle" - demonstrates taking in a stream and returning a response
 \--- Project ':user-preferences'          | another server "in-the-middle" -  demonstrates taking in AND returning a stream
 ```
+
+### Call sequence
+
+The full order of operations is as follows (not super obvious; pay attention to when streams are opened and closed):
+
+```mermaid
+sequenceDiagram
+    some-client->>+movie-finder: getMovie({ genre })
+
+    movie-finder->>+recommender: recommendMovie({ movies })
+    note over recommender: open recommendMovie stream
+
+    movie-finder->>+user-preferences: getShortListedMovies({ userId })
+    note over user-preferences: open getShortListedMovies stream
+
+    movie-finder->>+movie-store: getMovies({ genre })
+    note over movie-store: open getMovies stream
+    note over movie-store: get all movies that match the genre
+
+    loop for each movie
+      movie-store->>movie-finder: movie for genre
+      movie-finder->>user-preferences: move that can be shortlisted
+      note over user-preferences: determine if move makes the shortlist
+      opt if shortlisted 
+        user-preferences->>movie-finder: shortlisted movie
+        movie-finder->>recommender: movie that can be recommended
+        note over recommender: register movie
+      end
+    end
+    movie-store->>-movie-finder: close getMovies stream
+
+    user-preferences->>-movie-finder: close getShortlistedMovies stream
+    note over recommender: determine recommended movie from registered movies
+    recommender->>-movie-finder: close stream with recommended movie
+    
+    
+    movie-finder->>-some-client: recommended Movie```
