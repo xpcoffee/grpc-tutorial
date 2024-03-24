@@ -1,9 +1,15 @@
-# grpc-tutorial
+# gRPC Tutorial
+
+My personal reference for learning the basics of service-to-service communications using [gRPC](https://grpc.io/docs/what-is-grpc/introduction/).
 
 This repo expands on the following tutorial:
 https://www.cncf.io/blog/2021/08/04/grpc-in-action-example-using-java-microservices/
 
 ## Quick start
+
+### Using Docker
+
+> Pre-requisite for having docker installed locally. See also [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
 Start the services:
  
@@ -27,19 +33,7 @@ MovieFinderService/getMovie
 }
 ```
 
-## Building the project for development
-
-Generate proto definitions:
-```shell
-./gradlew generateProto
-```
-
-Build:
-```shell
-./gradlew build
-```
-
-## Run projects & servers directly
+### Run projects & servers directly
 
 Run servers (in different processes)
 ```shell
@@ -60,7 +54,21 @@ PORT=50054 \
 ./gradlew recommender:run
 ```
 
-## Subproject structure
+## Development
+
+### Building / generating types
+Generate proto definitions:
+```shell
+./gradlew generateProto
+```
+
+Build:
+```shell
+./gradlew build
+```
+
+
+### Subproject structure
 
 ```text
 Root project 'movie-grpc'
