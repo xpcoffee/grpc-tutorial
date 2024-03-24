@@ -1,2 +1,2 @@
 rootProject.name = 'movie-grpc'
-include 'movie-api', 'movie-store', 'recommender', 'user-preferences', 'movie-finder', 'movie-finder-consumer'
+include 'movie-api', 'movie-store', 'recommender', 'user-preferences', 'movie-finder'
