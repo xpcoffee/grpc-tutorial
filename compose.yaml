@@ -1,23 +1,27 @@
 services:
   movie-finder:
+    container_name: movie-finder
     build:
       context: .
       target: movie-finder
     ports:
       - 50051:50051
   user-preferences:
+    container_name: user-preferences
     build:
       context: .
       target: user-preferences
     ports:
       - 50052:50051
   recommender:
+    container_name: recommender
     build:
       context: .
       target: recommender
     ports:
       - 50053:50051
   movie-store:
+    container_name: movie-store
     build:
       context: .
       target: movie-store
