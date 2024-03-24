@@ -9,7 +9,7 @@ https://www.cncf.io/blog/2021/08/04/grpc-in-action-example-using-java-microservi
 
 ### Using Docker
 
-> Pre-requisite for having docker installed locally. See also [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+> Pre-requisite of having docker installed locally. See also [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
 Start the services:
  
