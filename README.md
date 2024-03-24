@@ -2,6 +2,10 @@
 
 My personal reference for learning the basics of service-to-service communications using [gRPC](https://grpc.io/docs/what-is-grpc/introduction/).
 
+The repo contains a distributed system that allows a user to request a movie recommendation. The repo has multiple standalone projects, one for each service. 
+
+Gradle is used to manage the multi-project build, and Docker-compose enables the full distributed system to built and run locally.
+
 This repo expands on the following tutorial:
 https://www.cncf.io/blog/2021/08/04/grpc-in-action-example-using-java-microservices/
 
