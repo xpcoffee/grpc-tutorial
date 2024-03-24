@@ -1,0 +1,25 @@
+services:
+  movie-finder:
+    build:
+      context: .
+      target: movie-finder
+    ports:
+      - 50051:50051
+  user-preferences:
+    build:
+      context: .
+      target: user-preferences
+    ports:
+      - 50052:50051
+  recommender:
+    build:
+      context: .
+      target: recommender
+    ports:
+      - 50053:50051
+  movie-store:
+    build:
+      context: .
+      target: movie-store
+    ports:
+      - 50054:50051
