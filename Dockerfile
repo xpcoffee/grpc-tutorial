@@ -1,6 +1,8 @@
 FROM gradle:jdk17 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
+# This builds the full project every time - done for simplicity of this example,
+# but should consider separate builds per service to improve dev experience.
 RUN gradle jar --no-daemon
 
 FROM openjdk:17.0.1-jdk-slim AS movie-finder
