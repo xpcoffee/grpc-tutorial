@@ -3,18 +3,16 @@
 This repo expands on the following tutorial:
 https://www.cncf.io/blog/2021/08/04/grpc-in-action-example-using-java-microservices/
 
-## Quick start - docker
+## Quick start - run in docker
 
 > WIP 
-> 1. need to fix ports (exposing 50051 for all services, but they're not listening there) 
-> 2. make ports configurable (should not be hardcoded)
-> 3. add gRPC discovery to movie-finder server to remove reliance on client
+> add gRPC discovery to movie-finder server to remove reliance on client
  
  ```shell
 docker compose up
 ```
 
-## Quick start - manual
+## Quick start - run directly
 
 ```shell
 # generate classes from proto definitions

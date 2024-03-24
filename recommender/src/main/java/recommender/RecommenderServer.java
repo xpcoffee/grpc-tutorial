@@ -4,17 +4,22 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class RecommenderServer {
-    public static final int RECOMMENDER_SERVICE_PORT = 50054;
+    public static final int DEFAULT_RECOMMENDER_SERVICE_PORT = 50054;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Server server = ServerBuilder.forPort(RECOMMENDER_SERVICE_PORT)
+        var port = Optional.ofNullable(System.getenv("PORT"))
+                .map(Integer::parseInt)
+                .orElseGet(() -> DEFAULT_RECOMMENDER_SERVICE_PORT);
+
+        Server server = ServerBuilder.forPort(port)
                 .addService(new RecommenderServiceImpl())
                 .build();
 
         server.start();
-        System.out.println("Recommender server started.");
+        System.out.println("Recommender server started on port " + port);
 
         Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> {

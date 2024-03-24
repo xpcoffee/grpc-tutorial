@@ -11,10 +11,10 @@ import io.grpc.StatusRuntimeException;
  * Makes a grpc call to get a movie recommendation.
  */
 public class MovieFinderClient {
-    public static final int MOVIE_CONTROLLER_SERVICE_PORT = 50050;
+    public static final int MOVIE_FINDER_SERVER_PORT = 50051;
 
     public static void main(String[] args) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", MOVIE_CONTROLLER_SERVICE_PORT).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", MOVIE_FINDER_SERVER_PORT).usePlaintext().build();
         var movieFinderClient = MovieFinderServiceGrpc.newBlockingStub(channel);
 
         try {

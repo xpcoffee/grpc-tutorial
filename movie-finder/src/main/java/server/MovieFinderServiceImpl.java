@@ -15,6 +15,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -22,31 +23,49 @@ import java.util.concurrent.TimeUnit;
  * Orchestrates logic needed to find, filter, recommend movies.
  */
 public class MovieFinderServiceImpl extends MovieFinderServiceGrpc.MovieFinderServiceImplBase {
-    public static final int MOVIE_STORE_SERVICE_PORT = 50052;
-    public static final int USER_PREFERENCES_SERVICE_PORT = 50053;
-    public static final int RECOMMENDER_SERVICE_PORT = 50054;
+    private static final int DEFAULT_MOVIE_STORE_SERVER_PORT = 50052;
+    private static final int DEFAULT_USER_PREFERENCES_SERVER_PORT = 50053;
+    private static final int DEFAULT_RECOMMENDER_SERVER_PORT = 50054;
+    private static final String DEFAULT_SERVER_HOST = "localhost";
 
+    private final String movieStoreEndpoint;
+    private final String userPreferencesEndpoint;
+    private final String recommenderEndpoint;
+
+
+    public MovieFinderServiceImpl() {
+        this.movieStoreEndpoint = Optional.ofNullable(System.getenv("MOVIE_STORE_SERVER_ENDPOINT"))
+                .orElseGet(() -> DEFAULT_SERVER_HOST + ":" + DEFAULT_MOVIE_STORE_SERVER_PORT);
+        this.userPreferencesEndpoint = Optional.ofNullable(System.getenv("USER_PREFERENCES_SERVER_ENDPOINT"))
+                .orElseGet(() -> DEFAULT_SERVER_HOST + ":" + DEFAULT_USER_PREFERENCES_SERVER_PORT);
+        this.recommenderEndpoint = Optional.ofNullable(System.getenv("RECOMMENDER_SERVER_ENDPOINT"))
+                .orElseGet(() -> DEFAULT_SERVER_HOST + ":" + DEFAULT_RECOMMENDER_SERVER_PORT);
+
+        System.out.println("Using movie-store endpoint " + this.movieStoreEndpoint);
+        System.out.println("Using user-preferences endpoint " + this.userPreferencesEndpoint);
+        System.out.println("Using recommender endpoint " + this.recommenderEndpoint);
+    }
 
     /**
      * Returns movies based on:
-     *  - the genre specified in the request
-     *  - the user's preferences
-     *  - recommendations engine
-     *
-     *
-     *  The order of filtering operations is:
-     *   1. get all movies by genre
-     *   2. filter by user preferences
-     *   3. recommends one of them
+     * - the genre specified in the request
+     * - the user's preferences
+     * - recommendations engine
+     * <p>
+     * <p>
+     * The order of filtering operations is:
+     * 1. get all movies by genre
+     * 2. filter by user preferences
+     * 3. recommends one of them
      */
     @Override
     public void getMovie(MovieRequest request, StreamObserver<MovieResponse> responseObserver) {
         String userId = request.getUserid();
 
 
-        MovieStoreServiceGrpc.MovieStoreServiceBlockingStub movieStoreClient = MovieStoreServiceGrpc.newBlockingStub(getChannel(MOVIE_STORE_SERVICE_PORT));
-        UserPreferencesServiceGrpc.UserPreferencesServiceStub userPreferencesClient = UserPreferencesServiceGrpc.newStub(getChannel(USER_PREFERENCES_SERVICE_PORT));
-        RecommenderServiceGrpc.RecommenderServiceStub recommenderClient = RecommenderServiceGrpc.newStub(getChannel(RECOMMENDER_SERVICE_PORT));
+        MovieStoreServiceGrpc.MovieStoreServiceBlockingStub movieStoreClient = MovieStoreServiceGrpc.newBlockingStub(getChannel(movieStoreEndpoint));
+        UserPreferencesServiceGrpc.UserPreferencesServiceStub userPreferencesClient = UserPreferencesServiceGrpc.newStub(getChannel(userPreferencesEndpoint));
+        RecommenderServiceGrpc.RecommenderServiceStub recommenderClient = RecommenderServiceGrpc.newStub(getChannel(recommenderEndpoint));
 
         // no idea what the latch is for...
         CountDownLatch latch = new CountDownLatch(1);
@@ -103,12 +122,15 @@ public class MovieFinderServiceImpl extends MovieFinderServiceGrpc.MovieFinderSe
 
         try {
             latch.await(3L, TimeUnit.SECONDS);
-        }catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private ManagedChannel getChannel(int port) {
-        return ManagedChannelBuilder.forAddress("localhost", port).usePlaintext().build();
+    private ManagedChannel getChannel(String endpoint) {
+        var tokens = endpoint.split(":");
+        var host = tokens[0];
+        var port = Integer.parseInt(tokens[1]);
+        return ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
     }
 }
