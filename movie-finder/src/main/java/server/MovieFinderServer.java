@@ -2,6 +2,7 @@ package server;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.protobuf.services.ProtoReflectionService;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -16,6 +17,7 @@ public class MovieFinderServer {
 
         Server server = ServerBuilder.forPort(port)
                 .addService(new MovieFinderServiceImpl())
+                .addService(ProtoReflectionService.newInstance())
                 .build();
 
         server.start();
