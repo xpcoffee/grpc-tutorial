@@ -32,6 +32,16 @@ MovieFinderService/getMovie
     "genre": "ACTION"
 }
 ```
+```json
+{
+    "movie": {
+        "title": "The Bourne Ultimatum",
+        "rating": 8,
+        "genre": "ACTION",
+        "description": "Spy action-thriller"
+    }
+}
+```
 
 ### Run projects & servers directly
 
