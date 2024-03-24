@@ -1,4 +1,4 @@
-package moviefinder;
+package server;
 
 import com.proto.moviefinder.MovieFinderServiceGrpc;
 import com.proto.moviefinder.MovieRequest;

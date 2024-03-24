@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.8.14'
+    id 'idea'
+}
+group 'com.xpcoffee'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.12.0'
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.34.1'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'io.grpc:grpc-netty-shaded:1.34.1'
+    compileOnly 'io.grpc:grpc-protobuf:1.34.1'
+    compileOnly 'io.grpc:grpc-stub:1.34.1'
+}
