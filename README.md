@@ -129,11 +129,25 @@ public class OversimplifiedMovieStoreServer {
    }
 }
 ```
-5. Build the project
+5. To implement logic that calls against a server use the generated client (called a "stub" in gRPC) e.g. implementation of [MovieFinderServiceImpl](./movie-finder/src/main/java/server/MovieFinderServiceImpl.java).
+```java
+import com.proto.moviestore.MovieStoreServiceGrpc;
+
+// "blocking" means it waits for the response before moving onto the next line of code,
+//with "non-blocking" the call happens in the background and you need to react to it async (e.g. with an observer)
+MovieStoreServiceGrpc.MovieStoreServiceBlockingStub movieStoreClient = MovieStoreServiceGrpc.newBlockingStub(getChannel(movieStoreEndpoint));
+
+movieStoreClient.getMovies(MovieStoreRequest.newBuilder().setGenre(request.getGenre()).build())
+  .forEachRemaining(response -> {
+    response.getMovie(); // do something with the response
+});
+```
+  
+6. Build the project
 ```shell
 ./gradlew build
 ```
-6. Run and call against the server (see [Quickstart](#Quickstart))
+7. Run and call against the server (see [Quickstart](#Quickstart))
 
 
 ### Subproject structure
