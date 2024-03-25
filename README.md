@@ -70,16 +70,70 @@ PORT=50054 \
 
 ## Development
 
-### Building / generating types
-Generate proto definitions:
+### The gRPC dev cycle
+
+1. Change/add definitions in `.proto` files e.g. [movie-store.proto](./movie-store/src/main/proto/moviestore/moviestore.proto)
+```protobuf
+syntax = "proto3";
+package moviestore;
+import "common/common.proto";
+
+option java_package = "com.proto.moviestore";
+option java_multiple_files = true;
+
+message MovieStoreRequest {
+    common.Genre genre = 1;
+}
+message MovieStoreResponse {
+    common.Movie movie = 1;
+}
+
+service MovieStoreService {
+    rpc getMovies(MovieStoreRequest) returns (stream MovieStoreResponse) {};
+}
+```
+3. Clean and generate boilerplate classes out of the proto definitions
 ```shell
+./gradlew clean
 ./gradlew generateProto
 ```
+```text
+com.proto.moviestore.MovieStoreRequest;
+com.proto.moviestore.MovieStoreResponse;
+com.proto.moviestore.MovieStoreServiceGrpc;
+```
 
-Build:
+3. To implement the logic for services, extend the generated `Base` class e.g. [MovieStoreServiceImpl]([https://github.com/xpcoffee/grpc-tutorial/blob/master/movie-store/src/main/java/moviestore/MovieStoreServer.java](https://github.com/xpcoffee/grpc-tutorial/blob/master/movie-store/src/main/java/moviestore/MovieStoreServiceImpl.java))
+```java
+import com.proto.moviestore.MovieStoreRequest;
+import com.proto.moviestore.MovieStoreResponse;
+import com.proto.moviestore.MovieStoreServiceGrpc;
+
+public class OversimplifiedMovieStoreService extends MovieStoreServiceGrpc.MovieStoreServiceImplBase {
+    @Override
+    public void getMovies(MovieStoreRequest request, StreamObserver<MovieStoreResponse> responseObserver) {
+      // Implement the method
+    ]
+}
+```
+4. Use the service in a server e.g. [MovieStoreServer](https://github.com/xpcoffee/grpc-tutorial/blob/master/movie-store/src/main/java/moviestore/MovieStoreServer.java)
+```java
+import com.moviestore.OversimplifiedMovieStoreService;
+
+public class OversimplifiedMovieStoreServer {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Server server = ServerBuilder.forPort(50051)
+                .addService(new OversimplifiedMovieStoreService())
+                .build()
+                .start();
+   }
+}
+```
+5. Build the project
 ```shell
 ./gradlew build
 ```
+6. Run and call against the server (see [Quickstart](#Quickstart))
 
 
 ### Subproject structure
