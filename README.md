@@ -9,7 +9,7 @@ Gradle is used to manage the multi-project build, and Docker-compose enables the
 This repo expands on the following tutorial:
 https://www.cncf.io/blog/2021/08/04/grpc-in-action-example-using-java-microservices/
 
-## Quick start
+## Quickstart
 
 ### Using Docker
 
