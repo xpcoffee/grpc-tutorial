@@ -92,7 +92,7 @@ service MovieStoreService {
     rpc getMovies(MovieStoreRequest) returns (stream MovieStoreResponse) {};
 }
 ```
-3. Clean and generate boilerplate classes out of the proto definitions
+2. Clean and generate boilerplate classes out of the proto definitions
 ```shell
 ./gradlew clean
 ./gradlew generateProto
